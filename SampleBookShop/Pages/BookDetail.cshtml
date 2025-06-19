@@ -1,0 +1,91 @@
+@page
+@model SampleBookShop.Pages.BookDetailModel
+@{
+    ViewData["Title"] = Model.Book?.Title ?? "書籍詳細";
+}
+
+<div class="container">
+    @if (Model.Book != null)
+    {
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div class="placeholder-img bg-light p-5 mb-3" style="height: 400px; display: flex; align-items: center; justify-content: center;">
+                            <span class="text-muted">書籍画像</span>
+                        </div>
+                        @if (Model.Book.StockQuantity > 0)
+                        {
+                            <div class="alert alert-success">
+                                <strong>在庫あり</strong><br>
+                                @Model.Book.StockQuantity 冊
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-danger">
+                                <strong>在庫なし</strong>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <h1>@Model.Book.Title</h1>
+                
+                <div class="row mb-3">
+                    <div class="col-sm-3"><strong>著者:</strong></div>
+                    <div class="col-sm-9">@Model.Book.Author</div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-sm-3"><strong>出版社:</strong></div>
+                    <div class="col-sm-9">@Model.Book.Publisher</div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-sm-3"><strong>ISBN:</strong></div>
+                    <div class="col-sm-9">@Model.Book.Isbn</div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-sm-3"><strong>出版日:</strong></div>
+                    <div class="col-sm-9">@Model.Book.PublishedDate.ToString("yyyy年M月d日")</div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-sm-3"><strong>ジャンル:</strong></div>
+                    <div class="col-sm-9">@Model.Book.Genre</div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-sm-3"><strong>価格:</strong></div>
+                    <div class="col-sm-9">
+                        <span class="h4 text-primary">¥@Model.Book.Price.ToString("N0")</span>
+                    </div>
+                </div>
+                
+                @if (!string.IsNullOrWhiteSpace(Model.Book.Description))
+                {
+                    <div class="mt-4">
+                        <h3>内容紹介</h3>
+                        <p class="lead">@Model.Book.Description</p>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">
+            <h4>書籍が見つかりません</h4>
+            <p>指定された書籍は存在しないか、削除された可能性があります。</p>
+        </div>
+    }
+    
+    <div class="mt-4">
+        <a class="btn btn-secondary me-2" href="javascript:history.back()">前のページに戻る</a>
+        <a class="btn btn-outline-secondary me-2" asp-page="/Search">検索画面</a>
+        <a class="btn btn-outline-secondary" asp-page="/Index">ホーム</a>
+    </div>
+</div>

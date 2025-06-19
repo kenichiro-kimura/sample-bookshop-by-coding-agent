@@ -1,0 +1,87 @@
+@page
+@model SampleBookShop.Pages.SearchResultsModel
+@{
+    ViewData["Title"] = "検索結果";
+}
+
+<div class="container">
+    <h1>検索結果</h1>
+    
+    @if (Model.SearchRequest != null && (
+        !string.IsNullOrWhiteSpace(Model.SearchRequest.Title) ||
+        !string.IsNullOrWhiteSpace(Model.SearchRequest.Author) ||
+        !string.IsNullOrWhiteSpace(Model.SearchRequest.Publisher) ||
+        !string.IsNullOrWhiteSpace(Model.SearchRequest.Genre) ||
+        !string.IsNullOrWhiteSpace(Model.SearchRequest.Isbn)))
+    {
+        <div class="alert alert-info">
+            <h5>検索条件:</h5>
+            <ul class="mb-0">
+                @if (!string.IsNullOrWhiteSpace(Model.SearchRequest.Title))
+                {
+                    <li>書籍名: @Model.SearchRequest.Title</li>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.SearchRequest.Author))
+                {
+                    <li>著者名: @Model.SearchRequest.Author</li>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.SearchRequest.Publisher))
+                {
+                    <li>出版社: @Model.SearchRequest.Publisher</li>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.SearchRequest.Genre))
+                {
+                    <li>ジャンル: @Model.SearchRequest.Genre</li>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.SearchRequest.Isbn))
+                {
+                    <li>ISBN: @Model.SearchRequest.Isbn</li>
+                }
+            </ul>
+        </div>
+    }
+
+    @if (Model.Books != null && Model.Books.Any())
+    {
+        <p class="text-muted">@Model.Books.Count()件の結果が見つかりました。</p>
+        
+        <div class="row">
+            @foreach (var book in Model.Books)
+            {
+                <div class="col-md-6 col-lg-4 mb-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a asp-page="/BookDetail" asp-route-id="@book.Id" class="text-decoration-none">
+                                    @book.Title
+                                </a>
+                            </h5>
+                            <p class="card-text">
+                                <strong>著者:</strong> @book.Author<br>
+                                <strong>出版社:</strong> @book.Publisher<br>
+                                <strong>価格:</strong> ¥@book.Price.ToString("N0")<br>
+                                <strong>在庫:</strong> @book.StockQuantity 冊
+                            </p>
+                            <div class="text-end">
+                                <a asp-page="/BookDetail" asp-route-id="@book.Id" class="btn btn-outline-primary btn-sm">詳細を見る</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">
+            <h5>検索結果なし</h5>
+            <p>指定した条件に一致する書籍が見つかりませんでした。</p>
+            <p>検索条件を変更して再度お試しください。</p>
+        </div>
+    }
+    
+    <div class="mt-4">
+        <a class="btn btn-secondary me-2" asp-page="/Search">検索画面に戻る</a>
+        <a class="btn btn-outline-secondary" asp-page="/Index">ホームに戻る</a>
+    </div>
+</div>
