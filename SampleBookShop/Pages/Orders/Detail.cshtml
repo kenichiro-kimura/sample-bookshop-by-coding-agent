@@ -1,0 +1,184 @@
+@page
+@model SampleBookShop.Pages.Orders.DetailModel
+@{
+    ViewData["Title"] = Model.Order?.OrderNumber ?? "発注詳細";
+}
+
+<div class="container">
+    @if (Model.Order != null)
+    {
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>発注詳細</h1>
+            <span class="badge bg-@(GetStatusBadgeClass(Model.Order.Status)) fs-6">
+                @Model.Order.StatusDisplayName
+            </span>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">発注情報</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-sm-4"><strong>発注番号:</strong></div>
+                            <div class="col-sm-8">@Model.Order.OrderNumber</div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-sm-4"><strong>発注日:</strong></div>
+                            <div class="col-sm-8">@Model.Order.OrderDate.ToString("yyyy年M月d日")</div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-sm-4"><strong>ステータス:</strong></div>
+                            <div class="col-sm-8">
+                                <span class="badge bg-@(GetStatusBadgeClass(Model.Order.Status))">
+                                    @Model.Order.StatusDisplayName
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-sm-4"><strong>納期予定:</strong></div>
+                            <div class="col-sm-8">
+                                @if (Model.Order.ExpectedDeliveryDate.HasValue)
+                                {
+                                    @Model.Order.ExpectedDeliveryDate.Value.ToString("yyyy年M月d日")
+                                }
+                                else
+                                {
+                                    <span class="text-muted">未定</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">仕入先情報</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-sm-4"><strong>仕入先名:</strong></div>
+                            <div class="col-sm-8">@Model.Order.SupplierName</div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-sm-4"><strong>連絡先:</strong></div>
+                            <div class="col-sm-8">
+                                @if (!string.IsNullOrWhiteSpace(Model.Order.SupplierContact))
+                                {
+                                    @Model.Order.SupplierContact
+                                }
+                                else
+                                {
+                                    <span class="text-muted">未登録</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(Model.Order.Notes))
+        {
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">備考</h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">@Model.Order.Notes</p>
+                </div>
+            </div>
+        }
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">発注商品一覧</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.Order.Items.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>書籍名</th>
+                                    <th>著者</th>
+                                    <th>出版社</th>
+                                    <th>ISBN</th>
+                                    <th>ジャンル</th>
+                                    <th>単価</th>
+                                    <th>数量</th>
+                                    <th>合計</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Order.Items)
+                                {
+                                    <tr>
+                                        <td><strong>@item.Title</strong></td>
+                                        <td>@item.Author</td>
+                                        <td>@item.Publisher</td>
+                                        <td>@item.Isbn</td>
+                                        <td>@item.Genre</td>
+                                        <td>¥@item.UnitPrice.ToString("N0")</td>
+                                        <td>@item.Quantity 冊</td>
+                                        <td><strong>¥@item.TotalPrice.ToString("N0")</strong></td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr class="table-dark">
+                                    <th colspan="6">合計</th>
+                                    <th>@Model.Order.TotalQuantity 冊</th>
+                                    <th>¥@Model.Order.TotalAmount.ToString("N0")</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-info">
+                        発注商品がありません。
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">
+            <h4>発注が見つかりません</h4>
+            <p>指定された発注は存在しないか、削除された可能性があります。</p>
+        </div>
+    }
+    
+    <div class="mt-4">
+        <a class="btn btn-secondary me-2" asp-page="/Orders/Index">発注履歴一覧に戻る</a>
+        <a class="btn btn-outline-secondary" asp-page="/Index">ホームに戻る</a>
+    </div>
+</div>
+
+@functions {
+    private string GetStatusBadgeClass(SampleBookShop.Models.OrderStatus status)
+    {
+        return status switch
+        {
+            SampleBookShop.Models.OrderStatus.Pending => "warning",
+            SampleBookShop.Models.OrderStatus.Confirmed => "info",
+            SampleBookShop.Models.OrderStatus.Processing => "primary",
+            SampleBookShop.Models.OrderStatus.Shipped => "secondary",
+            SampleBookShop.Models.OrderStatus.Delivered => "success",
+            SampleBookShop.Models.OrderStatus.Cancelled => "danger",
+            _ => "secondary"
+        };
+    }
+}

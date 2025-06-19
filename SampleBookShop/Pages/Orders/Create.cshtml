@@ -1,0 +1,130 @@
+@page
+@model SampleBookShop.Pages.Orders.CreateModel
+@{
+    ViewData["Title"] = "新規発注";
+}
+
+<div class="container">
+    <h1>新規発注</h1>
+    
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">仕入先情報</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="OrderRequest.SupplierName" class="form-label"></label>
+                            <input asp-for="OrderRequest.SupplierName" class="form-control" placeholder="仕入先名を入力してください" />
+                            <span asp-validation-for="OrderRequest.SupplierName" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="OrderRequest.SupplierContact" class="form-label"></label>
+                            <input asp-for="OrderRequest.SupplierContact" class="form-control" placeholder="電話番号、メールアドレスなど" />
+                            <span asp-validation-for="OrderRequest.SupplierContact" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">発注情報</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="OrderRequest.ExpectedDeliveryDate" class="form-label"></label>
+                            <input asp-for="OrderRequest.ExpectedDeliveryDate" type="date" class="form-control" />
+                            <span asp-validation-for="OrderRequest.ExpectedDeliveryDate" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="OrderRequest.Notes" class="form-label"></label>
+                            <textarea asp-for="OrderRequest.Notes" class="form-control" rows="3" placeholder="特記事項があれば入力してください"></textarea>
+                            <span asp-validation-for="OrderRequest.Notes" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">書籍情報</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label asp-for="OrderRequest.Title" class="form-label"></label>
+                            <input asp-for="OrderRequest.Title" class="form-control" placeholder="書籍のタイトルを入力してください" />
+                            <span asp-validation-for="OrderRequest.Title" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="OrderRequest.Author" class="form-label"></label>
+                            <input asp-for="OrderRequest.Author" class="form-control" placeholder="著者名を入力してください" />
+                            <span asp-validation-for="OrderRequest.Author" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="OrderRequest.Publisher" class="form-label"></label>
+                            <input asp-for="OrderRequest.Publisher" class="form-control" placeholder="出版社名を入力してください" />
+                            <span asp-validation-for="OrderRequest.Publisher" class="text-danger"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label asp-for="OrderRequest.Isbn" class="form-label"></label>
+                            <input asp-for="OrderRequest.Isbn" class="form-control" placeholder="ISBNを入力してください" />
+                            <span asp-validation-for="OrderRequest.Isbn" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="OrderRequest.Genre" class="form-label"></label>
+                            <input asp-for="OrderRequest.Genre" class="form-control" placeholder="ジャンルを入力してください" />
+                            <span asp-validation-for="OrderRequest.Genre" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="OrderRequest.UnitPrice" class="form-label"></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">¥</span>
+                                        <input asp-for="OrderRequest.UnitPrice" type="number" step="0.01" class="form-control" placeholder="0" />
+                                    </div>
+                                    <span asp-validation-for="OrderRequest.UnitPrice" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="OrderRequest.Quantity" class="form-label"></label>
+                                    <input asp-for="OrderRequest.Quantity" type="number" class="form-control" placeholder="0" />
+                                    <span asp-validation-for="OrderRequest.Quantity" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mb-4">
+            <button type="submit" class="btn btn-primary btn-lg me-2">発注</button>
+            <a class="btn btn-secondary me-2" asp-page="/Orders/Index">発注履歴一覧に戻る</a>
+            <a class="btn btn-outline-secondary" asp-page="/Index">ホームに戻る</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
