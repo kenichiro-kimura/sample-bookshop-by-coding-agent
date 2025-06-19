@@ -2,6 +2,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddScoped<SampleBookShop.Repositories.IBookRepository, SampleBookShop.Repositories.MockBookRepository>();
 
 var app = builder.Build();
 

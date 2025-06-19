@@ -1,0 +1,43 @@
+@page
+@model SampleBookShop.Pages.SearchModel
+@{
+    ViewData["Title"] = "在庫検索";
+}
+
+<div class="container">
+    <h1>在庫検索</h1>
+    
+    <form method="post">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="SearchRequest.Title" class="form-label"></label>
+                    <input asp-for="SearchRequest.Title" class="form-control" placeholder="書籍のタイトルを入力してください" />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="SearchRequest.Author" class="form-label"></label>
+                    <input asp-for="SearchRequest.Author" class="form-control" placeholder="著者名を入力してください" />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="SearchRequest.Publisher" class="form-label"></label>
+                    <input asp-for="SearchRequest.Publisher" class="form-control" placeholder="出版社名を入力してください" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="SearchRequest.Genre" class="form-label"></label>
+                    <input asp-for="SearchRequest.Genre" class="form-control" placeholder="ジャンルを入力してください" />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="SearchRequest.Isbn" class="form-label"></label>
+                    <input asp-for="SearchRequest.Isbn" class="form-control" placeholder="ISBNを入力してください" />
+                </div>
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary me-2">検索</button>
+            <a class="btn btn-secondary" asp-page="/Index">ホームに戻る</a>
+        </div>
+    </form>
+</div>
